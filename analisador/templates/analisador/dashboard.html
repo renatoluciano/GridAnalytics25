@@ -30,14 +30,15 @@
                 <!-- Formulário de Filtro por Pista -->
                 <form method="GET" class="row g-3 align-items-center mb-2">
                     <div class="col-auto">
-                        <label for="pista" class="col-form-label font-weight-bold">Selecione a Pista:</label>
+                        <label for="pista" class="col-form-label fw-bold">Selecione a Pista:</label>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto col-md-4">
                         <select name="pista" id="pista" class="form-select">
-                            <option value="Bahrain" {% if pista == "Bahrain" %}selected{% endif %}>Bahrein</option>
-                            <option value="Saudi Arabia" {% if pista == "Saudi Arabia" %}selected{% endif %}>Arábia Saudita</option>
-                            <option value="Australia" {% if pista == "Australia" %}selected{% endif %}>Austrália</option>
-                            <option value="Monaco" {% if pista == "Monaco" %}selected{% endif %}>Mônaco</option>
+                            {% for nome_pista in pistas %}
+                                <option value="{{ nome_pista }}" {% if nome_pista == pista_atual %}selected{% endif %}>
+                                    {{ nome_pista }}
+                                </option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-auto">
@@ -83,7 +84,7 @@
                         {% empty %}
                         <tr>
                             <td colspan="5" class="text-center py-4 text-muted">
-                                Nenhum dado encontrado para esta corrida ou os dados de 2025 ainda não foram carregados pela API.
+                                Nenhum dado encontrado. O GP selecionado pode não ter acontecido ainda na temporada de 2025.
                             </td>
                         </tr>
                         {% endfor %}

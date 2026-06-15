@@ -1,12 +1,27 @@
 import fastf1
 import os
 
-# Configura o diretório de cache persistente mapeado via Docker
+# Configura o diretório de cache persistente que mapeamos via Docker
 CACHE_DIR = '/app/data_cache'
 if os.path.exists(CACHE_DIR):
     fastf1.Cache.enable_cache(CACHE_DIR)
 
-def obtener_resultados_corrida(ano=2025, pista='Bahrain', sessao='R'):
+def obter_calendario_2025():
+    """
+    Retorna uma lista com o nome de todas as pistas válidas da temporada de 2025.
+    """
+    try:
+        # Carrega o calendário oficial completo do ano solicitado
+        calendario = fastf1.get_event_schedule(2025)
+        # Filtra para remover sessões de testes (mantém apenas GPs oficiais)
+        GPs = calendario[calendario['EventFormat'] != 'testing']
+        return GPs['EventName'].tolist()
+    except Exception as e:
+        print(f"Erro ao buscar calendário: {e}")
+        # Fallback seguro caso a API falhe ou esteja fora do ar
+        return ['Bahrain Grand Prix', 'Saudi Arabian Grand Prix', 'Australian Grand Prix', 'Monaco Grand Prix']
+
+def obtener_resultados_corrida(ano=2025, pista='Bahrain Grand Prix', sessao='R'):
     """
     Busca os dados de uma corrida específica de F1.
     'R' indica a sessão de Corrida (Race).
@@ -35,5 +50,5 @@ def obtener_resultados_corrida(ano=2025, pista='Bahrain', sessao='R'):
             
         return resultados
     except Exception as e:
-        print(f"Erro ao coletar dados da FastF1: {e}")
+        print(f"Erro ao coletar dados da FastF1 para a pista {pista}: {e}")
         return []
