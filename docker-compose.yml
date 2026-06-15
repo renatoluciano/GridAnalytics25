@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    # Comando para rodar o servidor de desenvolvimento do Django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./data_cache:/app/data_cache
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
